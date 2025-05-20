@@ -17,27 +17,21 @@ driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option
 
 # === PDF EXPORT FUNCTION ===
 def export_as_pdf(record_id):
-    # Vault UI URL
+    # Build the full UI endpoint URL with your actual Vault structure
     url = f"https://sbdicerna-vault-training.veevavault.com/ui/#t/0TB000000000C01/V0C/{record_id}"
-    print(f"Navigating to {url}")
+    print(f"Opening: {url}")
     driver.get(url)
-    
-    # Wait for page to load
     time.sleep(5)
 
     try:
-        # Locate the export PDF button using data-value attribute
+        # Attempt to locate the "Download as PDF" button
         export_button = driver.find_element(
             By.CSS_SELECTOR,
             "li.vv-action-bar-menu-item[data-value='exportToPdf']"
         )
-        
         export_button.click()
-        print(f"Clicked 'Export as PDF' for record: {record_id}")
-        
-        # Allow some time for the export to be triggered
+        print(f"✅ Export triggered for record: {record_id}")
         time.sleep(5)
-
     except Exception as e:
         print(f"❌ Failed to export record {record_id}: {e}")
 
