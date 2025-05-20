@@ -4,44 +4,52 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
-# Set up Chrome options to run headlessly
+# === CONFIGURE CHROME OPTIONS ===
 chrome_options = Options()
-chrome_options.add_argument("--headless")  # Headless mode (no GUI)
-chrome_options.add_argument("--disable-gpu")  # Disable GPU (important for headless mode)
-chrome_options.add_argument("--no-sandbox")  # Required for some environments
+chrome_options.add_argument("--headless")             # Run in headless mode
+chrome_options.add_argument("--disable-gpu")          # Recommended for headless
+chrome_options.add_argument("--no-sandbox")           # Bypass OS security model
+chrome_options.add_argument("--window-size=1920,1080")  # Ensure consistent viewport
+chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
 
-# Initialize the WebDriver
-driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+# === INIT WEBDRIVER ===
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 
-# Function to export a record as PDF
+# === PDF EXPORT FUNCTION ===
 def export_as_pdf(record_id):
-    url = f"https://sbdicerna-vault-training.veevavault.com/api/v25.1/ui/#/lifesciences/person__v/{record_id}"
-    
-    # Navigate to the URL
+    # Vault UI URL
+    url = f"https://sbdicerna-vault-training.veevavault.com/ui/#t/0TB000000000C01/V0C/{record_id}"
+    print(f"Navigating to {url}")
     driver.get(url)
-    time.sleep(3)  # Wait for the page to load (adjust time if necessary)
+    
+    # Wait for page to load
+    time.sleep(5)
 
-    # Locate the "Export as PDF" button (you might need to inspect and adjust this)
     try:
-        # Assuming the button has a specific selector, adjust as necessary
-        export_button = driver.find_element(By.CSS_SELECTOR, 'button.export-pdf')
-        export_button.click()  # Click the button to trigger PDF export
+        # Locate the export PDF button using data-value attribute
+        export_button = driver.find_element(
+            By.CSS_SELECTOR,
+            "li.vv-action-bar-menu-item[data-value='exportToPdf']"
+        )
         
-        # Optionally, handle the print dialog if necessary
-        # (this will depend on how the dialog is handled in your environment)
-
-        time.sleep(5)  # Wait for the export to complete (adjust time if needed)
-        print(f"Exported record {record_id} as PDF")
+        export_button.click()
+        print(f"Clicked 'Export as PDF' for record: {record_id}")
+        
+        # Allow some time for the export to be triggered
+        time.sleep(5)
 
     except Exception as e:
-        print(f"Failed to export record {record_id}: {e}")
+        print(f"❌ Failed to export record {record_id}: {e}")
 
-# List of record IDs to loop through
-record_ids = ['V16000000001001']  # Example IDs, replace with actual IDs
+# === RECORDS TO EXPORT ===
+record_ids = [
+    "V0C000000001001",  # Add more record IDs as needed
+]
 
-# Loop through record IDs and export them
+# === LOOP THROUGH RECORDS ===
 for record_id in record_ids:
     export_as_pdf(record_id)
 
-# Close the driver once done
+# === CLEANUP ===
 driver.quit()
+print("✅ Done.")
