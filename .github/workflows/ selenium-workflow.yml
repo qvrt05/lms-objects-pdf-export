@@ -3,44 +3,27 @@ name: Selenium Automation for PDF Export
 on:
   push:
     branches:
-      - main  # Trigger on push to main
-  workflow_dispatch:  # Allow manual trigger from GitHub UI
+      - main
+  workflow_dispatch:
 
 jobs:
   selenium_job:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install --upgrade pip
+          pip install selenium webdriver-manager
 
-      # Step 4: Install Chrome and ChromeDriver
-      - name: Install Google Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget curl
-          curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb
-          sudo apt-get install -f  # Install dependencies for Chrome
-
-      # Step 5: Install ChromeDriver using WebDriver Manager
-      - name: Install ChromeDriver
-        run: |
-          pip install webdriver-manager
-
-      # Step 6: Run the Selenium automation script
       - name: Run Selenium automation script
         run: |
-          python main.py  # Ensure this path is correct
+          python main.py

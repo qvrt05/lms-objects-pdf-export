@@ -3,38 +3,27 @@ name: Selenium Automation for PDF Export
 on:
   push:
     branches:
-      - main  # You can change this to any branch you want the automation to run on
-  workflow_dispatch:  # Allows you to trigger it manually from GitHub UI
+      - main
+  workflow_dispatch:
 
 jobs:
   selenium_job:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+    runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code from the repository
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # You can change this version if needed
+          python-version: '3.8'
 
-      # Install dependencies using pip
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install selenium webdriver-manager
 
-      # Set up Google Chrome and ChromeDriver for Selenium
-      - name: Set up headless Chrome
-        uses: browser-actions/setup-chrome@v2
-        with:
-          chromedriver-version: 111.0.5563.64 # Example version; can be changed to your version
-          chrome-version: 111.0.5563.64 # Ensure version compatibility with chromedriver
-
-      # Run Selenium script (Replace with the correct path to your script)
       - name: Run Selenium automation script
         run: |
           python main.py
