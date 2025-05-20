@@ -24,18 +24,21 @@ def export_as_pdf(record_id):
         wait = WebDriverWait(driver, 10)
 
         # Step 1: Wait for the Actions menu button to appear and click it
-        actions_button = wait.until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, 'button[aria-label="All Actions"]')
-        ))
-        actions_button.click()
-        print("✅ Clicked 'All Actions' button")
+print("Waiting for actions button...")
+actions_button = wait.until(EC.visibility_of_element_located(
+    (By.CSS_SELECTOR, 'button[aria-label="All Actions"]')
+))
+print("Actions button found!")
+actions_button.click()
 
-        # Step 2: Wait for the "Download as PDF" menu item and click it
-        pdf_button = wait.until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, 'li.vv-action-bar-menu-item[data-value="exportToPdf"]')
-        ))
-        pdf_button.click()
-        print(f"✅ Clicked 'Download as PDF' for record {record_id}")
+print("Waiting for PDF button...")
+pdf_button = wait.until(EC.visibility_of_element_located(
+    (By.CSS_SELECTOR, 'li.vv-action-bar-menu-item[data-value="exportToPdf"]')
+))
+print("PDF button found!")
+pdf_button.click()
+
+
 
         time.sleep(5)  # Let download start if applicable
 
