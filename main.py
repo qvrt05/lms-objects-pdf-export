@@ -27,14 +27,17 @@ def login_to_vault(driver):
         raise Exception('VAULT_USERNAME and VAULT_PASSWORD environment variables must be set.')
     driver.get('https://login.veevavault.com/auth/login')
     wait = WebDriverWait(driver, 10)
-    print('Waiting for login page...')
-    username_input = wait.until(EC.visibility_of_element_located((By.NAME, 'username')))
-    password_input = wait.until(EC.visibility_of_element_located((By.NAME, 'password')))
-    login_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[type="submit"]')))
+    print('Waiting for username page...')
+    username_input = wait.until(EC.visibility_of_element_located((By.ID, 'j_username')))
+    continue_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[name="continue"]')))
     username_input.send_keys(username)
+    continue_button.click()
+    print('Username submitted, waiting for password page...')
+    password_input = wait.until(EC.visibility_of_element_located((By.ID, 'j_password')))
+    continue_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[name="continue"]')))
     password_input.send_keys(password)
-    login_button.click()
-    print('Login submitted, waiting for redirect...')
+    continue_button.click()
+    print('Password submitted, waiting for redirect...')
     time.sleep(5)  # Adjust as needed for login to complete
 
 def export_as_pdf(record_id):
